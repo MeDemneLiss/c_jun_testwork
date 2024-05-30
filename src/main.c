@@ -2,16 +2,17 @@
 
 int main(int argc, char *argv[])
 {
-    char *line = NULL;
-    size_t len = 0;
-    FILE *file_r = fopen(argv[1], "r");
-    if (file_r != NULL)
+    FILE *file_r;
+    if (argc == 1) // проверяем передан ли путь до файла
     {
-        int complex_com = 0;
+        printf("Please enter file path\nExampl: ./a.out name.txt\n");
+    }
+    else if (file_r = fopen(argv[1], "r"))
+    {
+        char complex_com = 0; // флаг длинного комментария
+        char simple_com = 0;  // флаг простого комментария
         int num_com = 0;
-        char last_ch;
-        char ch;
-        int simple_com = 0;
+        char last_ch, ch;
         while ((ch = getc(file_r)) != EOF)
         {
             if (last_ch == '/' && ch == '/' && !complex_com && !simple_com)
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
             }
             if (ch == '\n' && simple_com)
             {
-                if (last_ch != '\\')
+                if (last_ch != '\\') // обработка продления комментария
                 {
                     simple_com = 0;
                 }
@@ -47,10 +48,10 @@ int main(int argc, char *argv[])
             }
             last_ch = ch;
         }
+        fclose(file_r);
     }
     else
     {
         printf("ERROR:\nFile not found\n");
     }
-    fclose(file_r);
 }
